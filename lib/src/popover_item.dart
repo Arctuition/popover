@@ -15,7 +15,13 @@ class PopoverItem extends StatefulWidget {
   final double? arrowWidth;
   final double arrowHeight;
   final BoxConstraints? constraints;
-  final BuildContext context;
+
+  /// The context of the widget that will be used as an anchor for the popover.
+  /// If this is provided, [anchorRect] will be ignored.
+  final BuildContext? anchorContext;
+
+  /// The rect that will be used as an anchor for the popover.
+  final Rect? anchorRect;
   final double arrowDxOffset;
   final double arrowDyOffset;
   final double contentDyOffset;
@@ -24,7 +30,6 @@ class PopoverItem extends StatefulWidget {
 
   const PopoverItem({
     required this.child,
-    required this.context,
     required this.transition,
     required this.animation,
     required this.arrowHeight,
@@ -38,8 +43,13 @@ class PopoverItem extends StatefulWidget {
     this.arrowDyOffset = 0,
     this.contentDyOffset = 0,
     this.contentDxOffset = 0,
+    this.anchorContext,
+    this.anchorRect,
     super.key,
-  });
+  }) : assert(
+          anchorContext != null || anchorRect != null,
+          'anchorContext or anchorRect must be provided',
+        );
 
   @override
   _PopoverItemState createState() => _PopoverItemState();
@@ -136,17 +146,26 @@ class _PopoverItemState extends State<PopoverItem> {
   }
 
   void _configureRect() {
-    if (!widget.context.mounted) return;
-    final offset = BuildContextExtension.getWidgetLocalToGlobal(widget.context);
-    final bounds = BuildContextExtension.getWidgetBounds(widget.context);
+    if (widget.anchorContext != null && widget.anchorContext?.mounted == true) {
+      final offset =
+          BuildContextExtension.getWidgetLocalToGlobal(widget.anchorContext!);
+      final bounds =
+          BuildContextExtension.getWidgetBounds(widget.anchorContext!);
 
-    if (offset != null && bounds != null) {
-      _attachRect = Rect.fromLTWH(
-        offset.dx + (widget.arrowDxOffset),
-        offset.dy + (widget.arrowDyOffset),
-        bounds.width + (widget.contentDxOffset),
-        bounds.height + (widget.contentDyOffset),
-      );
+      if (offset != null && bounds != null) {
+        _attachRect = Rect.fromLTWH(
+          offset.dx + (widget.arrowDxOffset),
+          offset.dy + (widget.arrowDyOffset),
+          bounds.width + (widget.contentDxOffset),
+          bounds.height + (widget.contentDyOffset),
+        );
+      }
+      return;
+    } else if (widget.anchorRect != null) {
+      _attachRect = widget.anchorRect!;
+      return;
+    } else {
+      assert(false, 'anchorContext or anchorRect must be provided');
     }
   }
 }

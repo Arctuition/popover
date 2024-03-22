@@ -119,26 +119,23 @@ Future<T?> showPopover<T extends Object?>({
   return Navigator.of(context, rootNavigator: true).push<T>(
     RawDialogRoute<T>(
       pageBuilder: (_, animation, __) {
-        return PopScope(
-          onPopInvoked: (_) => onPop?.call(),
-          child: PopoverItem(
-            transition: transition,
-            child: Builder(builder: bodyBuilder),
-            context: context,
-            backgroundColor: backgroundColor,
-            direction: direction,
-            radius: radius,
-            boxShadow: shadow,
-            animation: animation,
-            arrowWidth: arrowWidth,
-            arrowHeight: arrowHeight,
-            constraints: constraints,
-            arrowDxOffset: arrowDxOffset,
-            arrowDyOffset: arrowDyOffset,
-            contentDyOffset: contentDyOffset,
-            contentDxOffset: contentDxOffset,
-            key: key,
-          ),
+        return PopoverItem(
+          transition: transition,
+          child: Builder(builder: bodyBuilder),
+          anchorContext: context,
+          backgroundColor: backgroundColor,
+          direction: direction,
+          radius: radius,
+          boxShadow: shadow,
+          animation: animation,
+          arrowWidth: arrowWidth,
+          arrowHeight: arrowHeight,
+          constraints: constraints,
+          arrowDxOffset: arrowDxOffset,
+          arrowDyOffset: arrowDyOffset,
+          contentDyOffset: contentDyOffset,
+          contentDxOffset: contentDxOffset,
+          key: key,
         );
       },
       barrierDismissible: barrierDismissible,
