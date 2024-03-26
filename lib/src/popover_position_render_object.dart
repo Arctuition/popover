@@ -96,29 +96,43 @@ final class PopoverPositionRenderObject extends RenderShiftedBox {
   double _horizontalOffset(Size size) {
     var offset = 0.0;
 
-    if (attachRect.left > size.width / 2 &&
-        PopoverUtils.physicalSize.width - attachRect.right > size.width / 2) {
-      offset = attachRect.left + attachRect.width / 2 - size.width / 2;
-    } else if (attachRect.left < size.width / 2) {
-      offset = arrowHeight;
-    } else {
-      offset = PopoverUtils.physicalSize.width - arrowHeight - size.width;
+    offset = attachRect.left + attachRect.width / 2 - size.width / 2;
+    if (offset < 0) offset = attachRect.left;
+    if (offset + size.width > PopoverUtils.physicalSize.width) {
+      offset = attachRect.right - size.width;
     }
     return offset;
+
+    // if (attachRect.left > size.width / 2 &&
+    //     PopoverUtils.physicalSize.width - attachRect.right > size.width / 2) {
+    //   offset = attachRect.left + attachRect.width / 2 - size.width / 2;
+    // } else if (attachRect.left < size.width / 2) {
+    //   offset = arrowHeight;
+    // } else {
+    //   offset = PopoverUtils.physicalSize.width - arrowHeight - size.width;
+    // }
+    // return offset;
   }
 
   double _verticalOffset(Size size) {
     var offset = 0.0;
 
-    if (attachRect.top > size.height / 2 &&
-        PopoverUtils.physicalSize.height - attachRect.bottom >
-            size.height / 2) {
-      offset = attachRect.top + attachRect.height / 2 - size.height / 2;
-    } else if (attachRect.top < size.height / 2) {
-      offset = arrowHeight;
-    } else {
-      offset = PopoverUtils.physicalSize.height - arrowHeight - size.height;
+    offset = attachRect.top + attachRect.height / 2 - size.height / 2;
+    if (offset < 0) offset = attachRect.top;
+    if (offset + size.height > PopoverUtils.physicalSize.height) {
+      offset = attachRect.bottom - size.height;
     }
     return offset;
+
+    // if (attachRect.top > size.height / 2 &&
+    //     PopoverUtils.physicalSize.height - attachRect.bottom >
+    //         size.height / 2) {
+    //   offset = attachRect.top + attachRect.height / 2 - size.height / 2;
+    // } else if (attachRect.top < size.height / 2) {
+    //   offset = arrowHeight;
+    // } else {
+    //   offset = PopoverUtils.physicalSize.height - arrowHeight - size.height;
+    // }
+    // return offset;
   }
 }
